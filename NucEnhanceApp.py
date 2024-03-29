@@ -8,19 +8,20 @@ import traceback
 from PyQt5.QtWidgets import (QApplication, QGridLayout,
                               QMainWindow, QLineEdit,
                              QMessageBox, QComboBox, QWidget,
-                              QAction, QDesktopWidget, QMenu, QTabWidget,  QFileDialog)
+                               QDesktopWidget, QMenu, QTabWidget,  QFileDialog)
 # from PyQt5.QtGui import QStandardItemModel, QStandardItem, QTextCursor, QIcon, QFont, QDesktopServices
 from PyQt5.QtGui import  QIcon
 
 # from PyQt5.QtCore import Qt, QSize, QRect, QMetaObject, QCoreApplication, QUrl
 
 from PyQt5.QtCore import Qt
+from multiprocessing import freeze_support
 
 import sys
 import os
 # import glob
 # import shutil
-from stack_2d23d_for_enhancement import OldNucPreprocessing
+# from stack_2d23d_for_enhancement import OldNucPreprocessing
 from nucleus_enhancement import Nucleus_Enhancement
 
 
@@ -108,88 +109,89 @@ class App(QMainWindow):
         else:
             event.ignore()
 
-    def center(self):
-        """
-        窗口居中
-        :return:
-        """
-        qr = self.frameGeometry()  # 获取主窗口框架
-        cp = QDesktopWidget().availableGeometry().center()  # 获取屏幕中心
-        qr.moveCenter(cp)  # 将框架中心移动到屏幕中心
-        self.move(qr.topLeft())  # 将主窗口左上角与框架左上角对齐
+    # def center(self):
+    #     """
+    #     窗口居中
+    #     :return:
+    #     """
+    #     qr = self.frameGeometry()  # 获取主窗口框架
+    #     cp = QDesktopWidget().availableGeometry().center()  # 获取屏幕中心
+    #     qr.moveCenter(cp)  # 将框架中心移动到屏幕中心
+    #     self.move(qr.topLeft())  # 将主窗口左上角与框架左上角对齐
 
+    #
+    # def contextMenuEvent(self, event):
+    #     """
+    #     右键菜单
+    #     使用 exec_() 方法显示菜单。从鼠标右键事件对象中获得当前坐标。
+    #     mapToGlobal() 方法把当前组件的相对坐标转换为窗口 (window) 的绝对坐标
+    #     :param event:
+    #     :return:
+    #     """
+    #     cmenu = QMenu(self)
+    #
+    #     runAct = cmenu.addAction("Run")
+    #     clearAct = cmenu.addAction("Clear")
+    #     action = cmenu.exec_(self.mapToGlobal(event.pos()))
+    #
+    #     if action == clearAct:
+    #         if self.functionbar.currentIndex() == 0:
+    #             for item in self.preprocess.findChildren((QLineEdit, QComboBox)):
+    #                 if not item is self.preprocess.findChild(QComboBox, "preprocessObject"):
+    #                     item.clear()
+    #         if self.functionbar.currentIndex() == 1:
+    #             for item in self.segmentation.findChildren((QLineEdit, QComboBox)):
+    #                 item.clear()
 
-    def contextMenuEvent(self, event):
-        """
-        右键菜单
-        使用 exec_() 方法显示菜单。从鼠标右键事件对象中获得当前坐标。
-        mapToGlobal() 方法把当前组件的相对坐标转换为窗口 (window) 的绝对坐标
-        :param event:
-        :return:
-        """
-        cmenu = QMenu(self)
+    # def updateBlankInfo(self):
+    #     """
+    #     用来同步更新参数
+    #     :return:
+    #     """
+    #     if self.functionbar.currentIndex() == 1: #当按钮点到segmentation
+    #         if self.preprocess.raw_image_root.text():
+    #             self.segmentation.raw_image_root.setText(self.preprocess.raw_image_root.text())
+    #             self.segmentation.embryoNameEdit.clear()
+    #             if os.path.isdir(os.path.join(self.preprocess.raw_image_root.text(), "RawStack")):
+    #                 listdir = [x for x in os.listdir(os.path.join(self.preprocess.raw_image_root.text(), "RawStack")) if not x.startswith(".")]
+    #                 listdir.sort()
+    #                 self.segmentation.embryoNameEdit.addItems(listdir)
+    #             else:
+    #                 os.makedirs(os.path.join(self.preprocess.raw_image_root.text(), "RawStack"))
 
-        runAct = cmenu.addAction("Run")
-        clearAct = cmenu.addAction("Clear")
-        action = cmenu.exec_(self.mapToGlobal(event.pos()))
-
-        if action == clearAct:
-            if self.functionbar.currentIndex() == 0:
-                for item in self.preprocess.findChildren((QLineEdit, QComboBox)):
-                    if not item is self.preprocess.findChild(QComboBox, "preprocessObject"):
-                        item.clear()
-            if self.functionbar.currentIndex() == 1:
-                for item in self.segmentation.findChildren((QLineEdit, QComboBox)):
-                    item.clear()
-
-    def updateBlankInfo(self):
-        """
-        用来同步更新参数
-        :return:
-        """
-        if self.functionbar.currentIndex() == 1: #当按钮点到segmentation
-            if self.preprocess.raw_image_root.text():
-                self.segmentation.raw_image_root.setText(self.preprocess.raw_image_root.text())
-                self.segmentation.embryoNameEdit.clear()
-                if os.path.isdir(os.path.join(self.preprocess.raw_image_root.text(), "RawStack")):
-                    listdir = [x for x in os.listdir(os.path.join(self.preprocess.raw_image_root.text(), "RawStack")) if not x.startswith(".")]
-                    listdir.sort()
-                    self.segmentation.embryoNameEdit.addItems(listdir)
-                else:
-                    os.makedirs(os.path.join(self.preprocess.raw_image_root.text(), "RawStack"))
-
-
-    def inputRawFloder(self):
-        dirName = QFileDialog.getExistingDirectory(self, 'Choose Raw Folder', './')
-        try:
-            self.preprocess.textEdit.clear()
-            self.preprocess.embryoNameBtn.clear()
-            self.preprocess.rawFolderEdit.setText(dirName)
-            if dirName:
-                listdir = [x for x in os.listdir(dirName) if not x.startswith(".")]
-                listdir.sort()
-                self.preprocess.embryoNameBtn.addItems(listdir)
-                self.segmentation.raw_tif = dirName
-
-        except Exception as e:
-            self.textEdit.setText(traceback.format_exc())
-            QMessageBox.warning(self, 'Warning!', 'Please Choose Right Folder!')
-
-    def newProjectFolder(self):
-        dirName = QFileDialog.getExistingDirectory(self, 'Choose Folder', './')
-        project_path = os.path.join(dirName, 'CellAppData')
-        try:
-            if not os.path.exists(project_path):
-                os.makedirs(project_path)
-            self.segmentation.raw_image_root.setText(project_path)
-            self.preprocess.raw_image_root.setText(project_path)
-
-        except Exception as e:
-            errorMessage = f"{e}"
-            QMessageBox.warning(self, 'Please choose project folder', errorMessage)
+    #
+    # def inputRawFloder(self):
+    #     dirName = QFileDialog.getExistingDirectory(self, 'Choose Raw Folder', './')
+    #     try:
+    #         self.preprocess.textEdit.clear()
+    #         self.preprocess.embryoNameBtn.clear()
+    #         self.preprocess.rawFolderEdit.setText(dirName)
+    #         if dirName:
+    #             listdir = [x for x in os.listdir(dirName) if not x.startswith(".")]
+    #             listdir.sort()
+    #             self.preprocess.embryoNameBtn.addItems(listdir)
+    #             self.segmentation.raw_tif = dirName
+    #
+    #     except Exception as e:
+    #         self.textEdit.setText(traceback.format_exc())
+    #         QMessageBox.warning(self, 'Warning!', 'Please Choose Right Folder!')
+    #
+    # def newProjectFolder(self):
+    #     dirName = QFileDialog.getExistingDirectory(self, 'Choose Folder', './')
+    #     project_path = os.path.join(dirName, 'CellAppData')
+    #     try:
+    #         if not os.path.exists(project_path):
+    #             os.makedirs(project_path)
+    #         self.segmentation.raw_image_root.setText(project_path)
+    #         self.preprocess.raw_image_root.setText(project_path)
+    #
+    #     except Exception as e:
+    #         errorMessage = f"{e}"
+    #         QMessageBox.warning(self, 'Please choose project folder', errorMessage)
 
 
 if __name__ == '__main__':
+    freeze_support()
     app = QApplication(sys.argv)
     ex = App()
     sys.exit(app.exec_())

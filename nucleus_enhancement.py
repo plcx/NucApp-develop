@@ -5,6 +5,7 @@ from PyQt5.QtCore import Qt, pyqtSignal, QThread, QMutex, QWaitCondition
 from concurrent.futures import ThreadPoolExecutor
 # from multiprocessing import cpu_count
 from csbdeep.utils import normalize
+from shutil import rmtree
 
 import traceback
 import os
@@ -458,7 +459,7 @@ class EnhancementThread(QThread):
         #     seperate_3dniigz_to_2dtif(niigz3d_this_path, saving_enhanced_tiff_path, raw_tiff_path, raw_tif_shape)
 
         # nuc_enhance(self.raw_image_dir, segNuc_dir_tem, enhance_dir, self.embryo_name,len(testset), (self.x_resize, self.y_resize, self.z_resize))
-
+        rmtree(stack_dir_root)
         self.segmentbarSignal.emit(10, 10)
 
 

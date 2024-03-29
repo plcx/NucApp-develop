@@ -1,2 +1,1 @@
-# CellApp
-a GUI to segment and train cell
+# NucEnhancedApp Enhance the Nucleus Images in live-cell embryos via Effective Deep Learning Model
