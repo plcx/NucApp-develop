@@ -458,6 +458,7 @@ class EnhancementThread(QThread):
         #     seperate_3dniigz_to_2dtif(niigz3d_this_path, saving_enhanced_tiff_path, raw_tiff_path, raw_tif_shape)
 
         # nuc_enhance(self.raw_image_dir, segNuc_dir_tem, enhance_dir, self.embryo_name,len(testset), (self.x_resize, self.y_resize, self.z_resize))
+
         self.segmentbarSignal.emit(10, 10)
 
 
