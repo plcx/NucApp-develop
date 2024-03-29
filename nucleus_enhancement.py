@@ -18,7 +18,7 @@ from glob import glob
 from tqdm import tqdm
 from tifffile import imread
 import multiprocessing as mp
-
+import logging
 # from stardist import fill_label_holes, random_label_cmap, calculate_extents, gputools_available
 from stardist import random_label_cmap
 
@@ -349,6 +349,7 @@ class EnhancementThread(QThread):
     def run(self):
         try:
             self.combine_nucleus_slices()
+            logging.debug('finished nucleus stack???')
             self.nuc_seg()
 
         except Exception:
@@ -386,6 +387,7 @@ class EnhancementThread(QThread):
 
     def nuc_seg(self):
 
+        logging.debug('start running DL')
 
         if self.tem_3d_middle_folder == None:
             self.segmentexcSignal.emit('Please input RawFloder')
@@ -415,13 +417,18 @@ class EnhancementThread(QThread):
         segNuc_dir_tem = os.path.join(stack_dir_root, 'SegNuc')
         if not os.path.exists(segNuc_dir_tem):
             os.makedirs(segNuc_dir_tem)
+
+        logging.debug('start loading model')
+
         stardist_model = StarDist3D(None, name='stardist_nuc', basedir='static/models')
+        logging.debug('finish loaded model')
 
 
 
         for i, path_this in enumerate(testset):
             # if self.isPause:
             #     self.cond.wait(self.mutex)
+            logging.debug(str([self.isCancel,path_this,i,stardist_model]))
             if self.isCancel:
                 break
             img = normalize(path_this, 1, 99.8, axis=axis_norm)

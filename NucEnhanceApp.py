@@ -191,7 +191,8 @@ class App(QMainWindow):
 
 
 if __name__ == '__main__':
-    freeze_support()
+    # freeze_support()
+    os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
     app = QApplication(sys.argv)
     ex = App()
     sys.exit(app.exec_())

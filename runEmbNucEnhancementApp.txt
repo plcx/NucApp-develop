@@ -1,0 +1,8 @@
+conda create --name EmbNucEnhancementPYEnvironment20240329Ver python=3.9.19
+conda activate EmbNucEnhancementPYEnvironment20240329Ver
+pip install PyQt5
+pip install stardist
+pip install nibabel
+pip install tensorflow
+python NucEnhanceApp.py
+conda deactivate
