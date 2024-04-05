@@ -22,12 +22,22 @@ Then run the following command one by one in your terminal/command line/power sh
 **Second and future**
 * conda activate EmbNucEnhancementPYEnvironment20240329Ver
 * python NucEnhanceApp.py
+* group the correct raw nucleus tif images folder ![folder](./static/document_imgs/folder%20structure%20figure.png)!
 
 Then you get the ![APP](./static/document_imgs/app%20demo%20figure.png)
 
 *Close the terminal directly*
 
 ## 3. Result comparison
+The output folder looks like:
+![output folder](./static/document_imgs/output%20folder%20figure.png)
+
+
 The programme would enhance all recognized nucleus images and allow starrynite and acetree to trace the whole live-cell lineage ![as below](./static/document_imgs/result%20show%20figure.png).
 
 The enhanced performance would increase as the cell number increase (The messier the image, the better enhancement).
+
+## 4. Notes
+
+* Please make sure your computer has at least 16GiB memory.
+* The programme is running with only CPU and need no GPU.
