@@ -26,7 +26,7 @@ Then run the following command one by one in your terminal/command line/power sh
 
 Then you get the ![APP](./static/document_imgs/app%20demo%20figure.png)
 
-**CAUTIONS! You need at least 12GiB physical or swapped memory  free to run other DEEP LEARNING Enhancing Model!! Close other memory-consuming programs!**
+### **CAUTIONS! You need at least 12GiB physical or swap memory free to run our DEEP LEARNING enhancing model!! Close other memory-consuming programs!**
 
 *Close the terminal directly*
 
