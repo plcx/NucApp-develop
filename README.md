@@ -37,7 +37,11 @@ The programme would enhance all recognized nucleus images and allow starrynite a
 
 The enhanced performance would increase as the cell number increase (The messier the image, the better enhancement).
 
-## 4. Notes
+## 5. Issues/Notes
 
-* Please make sure your computer has at least 16GiB memory.
-* The programme is running with only CPU and need no GPU.
+* **Please make sure your computer has at least 16GiB memory**.
+
+* **The progress bar reflect not real progress. Actually, it takes about 1 hour (good cpu) to enhance a 300 time point >550-cell embryo. Please consider the real progress in the terminal or check the output folder.**
+* ![progress bar issue](./static/document_imgs/processing_bar_issue.png)
+
+* **The programme is running with only CPU and need no GPU**.

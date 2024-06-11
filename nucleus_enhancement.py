@@ -372,7 +372,7 @@ class EnhancementThread(QThread):
         if not os.path.isdir(self.tem_3d_middle_folder):
             os.makedirs(self.tem_3d_middle_folder)
 
-        mpPool = mp.Pool(min(mp.cpu_count() - 4,self.max_time))
+        mpPool = mp.Pool(min(mp.cpu_count()//2,self.max_time))
         configs = []
         self.segmentbarSignal.emit(1, 10)
 
@@ -448,7 +448,7 @@ class EnhancementThread(QThread):
         # def nuc_enhance(raw_tiff_path, pred_niigz_path, saving_enhanced_tiff_path, embryo_name, max_time,
         #                 raw_tif_shape):
 
-        mpPool = mp.Pool(min(mp.cpu_count() - 4, self.max_time))
+        mpPool = mp.Pool(min(mp.cpu_count()//2, self.max_time))
         configs = []
         for tp in range(1, self.max_time + 1):
             niigz3d_this_path = os.path.join(segNuc_dir_tem,
