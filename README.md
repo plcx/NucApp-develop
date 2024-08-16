@@ -1,4 +1,4 @@
-# NucEnhancedApp Enhance the Nucleus Images in live-cell embryos via Effective Deep Learning Model
+# DELICATE: NucEnhancedApp Enhance the Nucleus Images in live-cell embryos via Effective Deep Learning Model
 
 ## 1. Programme Introduction
 
@@ -26,8 +26,12 @@ Then run the following command one by one in your terminal/command line/power sh
 
 Then you get the ![APP](./static/document_imgs/app%20demo%20figure.png)
 
-### **CAUTIONS! You need at least 12GiB physical or swap memory free to run our DEEP LEARNING enhancing model!! Close other memory-consuming programs!**
-
+### **CAUTIONS!**
+* You need at least **16GiB** physical or swap memory free to run our DEEP LEARNING enhancing model!! Close other memory-consuming programs!
+* Make sure your images are cropped, which means there is **only one** embryo in the time series images.
+* The 3D X Y Z size should be tuned to range 150-300, 250-400, 120-250, respectively, and keep the resolution correct.
+* You may need to train your model or contact me (zelinli6-c(at)my.cityu.edu.hk). I will help you in training your own model for your lab (specific protein or microscopic).
+  
 *Close the terminal directly*
 
 ## 3. Result comparison
