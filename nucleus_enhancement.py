@@ -88,6 +88,9 @@ class Nucleus_Enhancement(QWidget):
         y_resize = QLabel('3D Y Size')
         z_resize = QLabel('3D Z Size')
 
+        model_root_path = QLabel('Model Path')
+        selected_model_name = QLabel('DELICATE Model')
+
         saved_enhanced_image_project_folder = QLabel('Enhanced Nucleus Image')
 
         self.raw_image_root = QLineEdit()
@@ -110,6 +113,13 @@ class Nucleus_Enhancement(QWidget):
         self.y_resizeEdit.setText('356')
         self.z_resizeEdit.setText('214')
 
+        self.model_root_path = QLineEdit()
+        self.model_root_path.setText('./static/models/')
+
+        self.selected_model_nameEdit = QComboBox()
+        modelNameFolderBtn = QPushButton("Select")
+        modelNameFolderBtn.clicked.connect(self.chooseDELICATEModelfromFolder)
+
         self.saving_enhanced_image_root = QLineEdit()
         saving_projectFolderBtn = QPushButton("Select")
         saving_projectFolderBtn.clicked.connect(self.chooseSavingEnhancedProjectFolder)
@@ -117,6 +127,7 @@ class Nucleus_Enhancement(QWidget):
 
         grid = QGridLayout()
         grid.setSpacing(30)
+
         grid.addWidget(raw_image_project_folder, 1, 0)
         grid.addWidget(self.raw_image_root, 1, 1)
         grid.addWidget(raw_projectFolderBtn, 1, 2)
@@ -137,9 +148,15 @@ class Nucleus_Enhancement(QWidget):
         grid.addWidget(z_resize, 8, 0)
         grid.addWidget(self.z_resizeEdit, 8, 1)
 
-        grid.addWidget(saved_enhanced_image_project_folder, 9, 0)
-        grid.addWidget(self.saving_enhanced_image_root, 9, 1)
-        grid.addWidget(saving_projectFolderBtn, 9, 2)
+        grid.addWidget(model_root_path, 9, 0)
+        grid.addWidget(self.model_root_path, 9, 1)
+        grid.addWidget(modelNameFolderBtn, 9, 2)
+        grid.addWidget(selected_model_name, 10, 0)
+        grid.addWidget(self.selected_model_nameEdit, 10, 1)
+
+        grid.addWidget(saved_enhanced_image_project_folder, 11, 0)
+        grid.addWidget(self.saving_enhanced_image_root, 11, 1)
+        grid.addWidget(saving_projectFolderBtn, 11, 2)
 
 
 
@@ -156,6 +173,22 @@ class Nucleus_Enhancement(QWidget):
                 listdir = [x for x in os.listdir(os.path.join(dirName)) if not x.startswith(".")]
                 listdir.sort()
                 self.embryoNameEdit.addItems(listdir)
+
+        except Exception as e:
+            self.textEdit.setText(traceback.format_exc())
+            QMessageBox.warning(self, 'Warning!', 'Please Choose Right Folder!')
+
+    def chooseDELICATEModelfromFolder(self):
+        dirName = QFileDialog.getExistingDirectory(self, 'Choose DELICATE Model Folder', './')
+        try:
+            self.textEdit.clear()
+            self.selected_model_nameEdit.clear()
+            self.model_root_path.setText(dirName)
+
+            if dirName:
+                listdir = [x for x in os.listdir(os.path.join(dirName)) if not x.startswith(".")]
+                listdir.sort()
+                self.selected_model_nameEdit.addItems(listdir)
 
         except Exception as e:
             self.textEdit.setText(traceback.format_exc())
@@ -193,6 +226,9 @@ class Nucleus_Enhancement(QWidget):
             para['x_resize'] = int(self.x_resizeEdit.text())
             para['y_resize'] = int(self.y_resizeEdit.text())
             para['z_resize'] = int(self.z_resizeEdit.text())
+
+            para["delicate_model_root"] = self.model_root_path.text()
+            para['delicate_model_name'] = self.selected_model_nameEdit.currentText()
 
             para['save_project_dir'] = self.saving_enhanced_image_root.text()
 
@@ -325,6 +361,10 @@ class EnhancementThread(QThread):
         self.x_resize = para.get("x_resize")
         self.y_resize = para.get("y_resize")
         self.z_resize = para.get("z_resize")
+
+        self.delicate_model_root=para.get("delicate_model_root")
+        self.delicate_model_name=para.get("delicate_model_name")
+
         self.save_image_dir = para.get("save_project_dir")
         self.tem_3d_middle_folder=None
 
@@ -420,7 +460,7 @@ class EnhancementThread(QThread):
 
         logging.debug('start loading model')
 
-        stardist_model = StarDist3D(None, name='stardist_nuc', basedir='static/models')
+        stardist_model = StarDist3D(None, name=self.delicate_model_name, basedir=self.delicate_model_root)
         logging.debug('finish loaded model')
 
 
