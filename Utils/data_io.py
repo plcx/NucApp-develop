@@ -34,12 +34,12 @@ def nib_load(file_name):
 #     with open(path, "wb") as f:
 #         pickle.dump(data, f)
 #
-# #  write *.nii.gz files
-# def nib_save(data, file_name):
-#     # print(file_name)
-#     check_folder(file_name)
-#     return nib.save(nib.Nifti1Image(data, np.eye(4)), file_name)
-#
+#  write *.nii.gz files
+def nib_save(data, file_name):
+    # print(file_name)
+    check_folder(file_name)
+    return nib.save(nib.Nifti1Image(data, np.eye(4)), file_name)
+
 # #  write MembAndNuc
 # def img_save(image, file_name):
 #     check_folder(file_name)
