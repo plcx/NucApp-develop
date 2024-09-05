@@ -24,7 +24,7 @@ def seperate_3dniigz_to_2dtif(para):
 
         raw_tif_image_this_p=tifffile.imread(raw_tif_file_path)
         biggest_grey =np.max(raw_tif_image_this_p)
-        tif_image_this_p=resize(image=raw_nuc_seg3d_volume[:,:,index_in_3d_seg_nuc-1], output_shape=raw_img_shape[:2], preserve_range=True, order=0)
+        tif_image_this_p=resize(image=raw_nuc_seg3d_volume[:,:,index_in_3d_seg_nuc-1], output_shape=raw_img_shape[:2], preserve_range=True, order=1)
         raw_tif_image_this_p[tif_image_this_p>0]=biggest_grey
         image_array_this_p=raw_tif_image_this_p.astype(np.uint8)
         check_folder(saving_tif_path)

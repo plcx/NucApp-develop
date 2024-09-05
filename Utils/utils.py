@@ -55,9 +55,9 @@ def save_indexed_tif(file_name, volume_data):
     tif_imgs = []
     for i_slice in range(num_slices):
         label_map = volume_data[..., i_slice]  # avoid 256 become 0
-        label_map_out = np.squeeze((label_map + 1).astype(np.uint8))
-        label_map_out[label_map == 0] = 0
-        tif_img=Image.fromarray(label_map_out)
+        # label_map_out = np.squeeze((label_map + 1).astype(np.uint8))
+        # label_map_out[label_map == 0] = 0
+        tif_img=Image.fromarray(label_map)
         # tif_img = Image.fromarray(label_map_out, mode="P")
         # tif_img.putpalette(P)
         tif_imgs.append(tif_img)

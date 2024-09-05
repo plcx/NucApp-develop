@@ -88,6 +88,8 @@ class Nucleus_Enhancement(QWidget):
         y_resize = QLabel('3D Y Size')
         z_resize = QLabel('3D Z Size')
 
+        max_time = QLabel('Max Time Point')
+
         model_root_path = QLabel('Model Path')
         selected_model_name = QLabel('DELICATE Model')
 
@@ -112,6 +114,11 @@ class Nucleus_Enhancement(QWidget):
         self.x_resizeEdit.setText('256')
         self.y_resizeEdit.setText('356')
         self.z_resizeEdit.setText('214')
+
+        self.max_tp_this = QLineEdit()
+        self.max_tp_this.setText('100')
+
+
 
         self.model_root_path = QLineEdit()
         self.model_root_path.setText('./static/models/')
@@ -148,15 +155,18 @@ class Nucleus_Enhancement(QWidget):
         grid.addWidget(z_resize, 8, 0)
         grid.addWidget(self.z_resizeEdit, 8, 1)
 
-        grid.addWidget(model_root_path, 9, 0)
-        grid.addWidget(self.model_root_path, 9, 1)
-        grid.addWidget(modelNameFolderBtn, 9, 2)
-        grid.addWidget(selected_model_name, 10, 0)
-        grid.addWidget(self.selected_model_nameEdit, 10, 1)
+        grid.addWidget(max_time, 9, 0)
+        grid.addWidget(self.max_tp_this, 9, 1)
 
-        grid.addWidget(saved_enhanced_image_project_folder, 11, 0)
-        grid.addWidget(self.saving_enhanced_image_root, 11, 1)
-        grid.addWidget(saving_projectFolderBtn, 11, 2)
+        grid.addWidget(model_root_path, 10, 0)
+        grid.addWidget(self.model_root_path, 10, 1)
+        grid.addWidget(modelNameFolderBtn, 10, 2)
+        grid.addWidget(selected_model_name, 11, 0)
+        grid.addWidget(self.selected_model_nameEdit, 11, 1)
+
+        grid.addWidget(saved_enhanced_image_project_folder, 12, 0)
+        grid.addWidget(self.saving_enhanced_image_root, 12, 1)
+        grid.addWidget(saving_projectFolderBtn, 12, 2)
 
 
 
@@ -226,6 +236,9 @@ class Nucleus_Enhancement(QWidget):
             para['x_resize'] = int(self.x_resizeEdit.text())
             para['y_resize'] = int(self.y_resizeEdit.text())
             para['z_resize'] = int(self.z_resizeEdit.text())
+
+            para['max_tp_this'] = int(self.max_tp_this.text())
+
 
             para["delicate_model_root"] = self.model_root_path.text()
             para['delicate_model_name'] = self.selected_model_nameEdit.currentText()
@@ -362,6 +375,9 @@ class EnhancementThread(QThread):
         self.y_resize = para.get("y_resize")
         self.z_resize = para.get("z_resize")
 
+        self.max_tp_this = para.get("max_tp_this")
+
+
         self.delicate_model_root=para.get("delicate_model_root")
         self.delicate_model_name=para.get("delicate_model_name")
 
@@ -405,7 +421,8 @@ class EnhancementThread(QThread):
         # save nucleus
         self.segmentexcSignal.emit('Packing 3D for Enhancing')
         origin_files = sorted(glob(os.path.join(self.raw_image_dir, self.embryo_name, "tif", "*.tif")))
-        self.max_time=int(len(origin_files)/self.z_raw)
+        # self.max_time=int(len(origin_files)/self.z_raw)
+        self.max_time=int(self.max_tp_this)
 
         # origin_files.sort()
         self.tem_3d_middle_folder = os.path.join(self.save_image_dir, 'tem_middle',self.embryo_name, "RawNuc")
